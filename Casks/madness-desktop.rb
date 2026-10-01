@@ -1,6 +1,6 @@
 cask "madness-desktop" do
-  version "0.1.4"
-  sha256 "a346fbb940124118ff5c728f00c135aa056761a5198ac14c3192ca7c0b6006b3"
+  version "0.1.5"
+  sha256 "5a325f6edc19b9650eba03678224b96fc5ce28d198cc3377f7b8e98daba7dd4d"
 
   url "https://github.com/MadnessEngineering/madnessDesktop/releases/download/v#{version}/MadnessDesktop-#{version}-darwin-arm64.zip"
   name "Madness Desktop"
