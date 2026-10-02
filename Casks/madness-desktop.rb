@@ -18,6 +18,14 @@ cask "madness-desktop" do
   app "Madness Desktop.app"
   binary "#{appdir}/Madness Desktop.app/Contents/Resources/app/static/madhub.sh", target: "madhub"
 
+  # The app is ad-hoc signed, not notarized. With the quarantine flag set,
+  # Gatekeeper's "Not Opened" dialog defaults to "Move to Trash", which deletes
+  # the app and leaves the madhub link dangling. Strip the flag so it just opens.
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Madness Desktop.app"]
+  end
+
   zap trash: [
     "~/Library/Application Support/Madness Desktop",
     "~/Library/Caches/cc.madnessinteractive.MadnessDesktop",
@@ -27,13 +35,11 @@ cask "madness-desktop" do
   ]
 
   caveats <<~EOS
-    Madness Desktop is not signed or notarized, so macOS blocks the first launch.
-    Either clear the quarantine flag:
+    Madness Desktop is not notarized. This cask clears its quarantine flag on
+    install so macOS opens it without a warning. If you still see "Not Opened",
+    click Done (NOT "Move to Trash") and run:
 
       xattr -dr com.apple.quarantine "#{appdir}/Madness Desktop.app"
-
-    or try to open it once, then go to System Settings -> Privacy & Security
-    and click "Open Anyway".
 
     Update with `brew upgrade --cask madness-desktop`, not `madhub upgrade`:
     madhub swaps the app behind Homebrew's back.
