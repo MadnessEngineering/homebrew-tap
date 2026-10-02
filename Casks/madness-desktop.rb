@@ -21,9 +21,11 @@ cask "madness-desktop" do
   # The app is ad-hoc signed, not notarized. With the quarantine flag set,
   # Gatekeeper's "Not Opened" dialog defaults to "Move to Trash", which deletes
   # the app and leaves the madhub link dangling. Strip the flag so it just opens.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Madness Desktop.app"]
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:           ["-dr", "com.apple.quarantine", "{{appdir}}/Madness Desktop.app"],
+        writable_paths: ["Madness Desktop.app"],
+        writable_base:  :appdir
   end
 
   zap trash: [
